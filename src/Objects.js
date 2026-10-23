@@ -7,38 +7,47 @@
   и присвоить начальное значение 100000.
   Объект после манипуляций следует вернуть в качестве результата работы функции.
 */
-export function personUpdate(data) {
-    if (data.gender === 'female') {
-        delete data.age;
+export function personUpdate(user) {
+    if (user.gender === 'female') {
+        if ('age' in user) {
+            delete user.age;
+        }
+    } else if (user.gender === 'male') {
+        if (!('income' in user)) {
+            user.income = 100000;
+        }
     }
-    if (data.gender === 'male' && !('income' in data)) {
-        data.income = 100000;
-    }
-    return data;
+    return user;
 }
+
 /*
   В функцию objectFieldsList приходят три объекта с различными полями, список которых заранее неизвестен.
   Верните список названий этих полей в алфавитном порядке в виде массива строк.
 */
-export function objectFieldsList(obj1, obj2, obj3) {
-    const fields = [
-        ...Object.keys(obj1),
-        ...Object.keys(obj2),
-        ...Object.keys(obj3),
-    ];
-    return [...new Set(fields)].sort();
+export function objectFieldsList(firstObj, secondObj, thirdObj) {
+    let propsFirst = Object.keys(firstObj);
+    let propsSecond = Object.keys(secondObj);
+    let propsThird = Object.keys(thirdObj);
+
+    let mergedProps = propsFirst.concat(propsSecond).concat(propsThird);
+    mergedProps.sort();
+
+    return mergedProps;
 }
+
 /*
   Верните в результате работы функции массив с клонами объекта obj.
   При этом каждый клон должен дополнительно содержать поле id со своим порядковым номером в массиве.
   Количество клонов - count.
 */
-export function objectClone(obj, count) {
-    const result = [];
-    for (let i = 0; i < count; i++) {
-        const clone = structuredClone(obj);
-        clone.id = i;
-        result.push(clone);
+export function objectClone(sourceObj, amount) {
+    let clonesArray = [];
+
+    for (let i = 0; i < amount; i++) {
+        let copy = JSON.parse(JSON.stringify(sourceObj));
+        copy.id = i;
+        clonesArray.push(copy);
     }
-    return result;
+
+    return clonesArray;
 }
